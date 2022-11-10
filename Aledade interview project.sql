@@ -1,3 +1,22 @@
+Supplied data as follows:
+A. physician_supplier_hcpcs.csv
+Medicare Physician & Other Practitioners - by Provider and Service.
+We limited this data set to records with state = DE and a subset of HCPCS codes.
+https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-pra
+ctitioners/medicare-physician-other-practitioners-by-provider-and-service
+B. physician_supplier_agg.csv
+Medicare Physician & Other Practitioners - by Provider.
+We limited this data set to records with state = DE.
+https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-pra
+ctitioners/medicare-physician-other-practitioners-by-provider
+C. physician _compare.csv
+Doctors and Clinicians National Downloadable File.
+We limited this data set to records with state = DE.
+https://data.cms.gov/provider-data/dataset/mj5m-pzi6
+
+This analysis was completed in an unpaid interview process.
+It is meant to theoretically aid in decision-making for an affordable care organization (ACO) while improving upon the value-based care model.
+
 SELECT *
 FROM aledade..physician_compare
 
