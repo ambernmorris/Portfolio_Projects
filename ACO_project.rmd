@@ -1,0 +1,53 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+Supplied data as follows:
+A. physician_supplier_hcpcs.csv
+Medicare Physician & Other Practitioners - by Provider and Service.
+We limited this data set to records with state = DE and a subset of HCPCS codes.
+https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-pra
+ctitioners/medicare-physician-other-practitioners-by-provider-and-service
+B. physician_supplier_agg.csv
+Medicare Physician & Other Practitioners - by Provider.
+We limited this data set to records with state = DE.
+https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-pra
+ctitioners/medicare-physician-other-practitioners-by-provider
+C. physician _compare.csv
+Doctors and Clinicians National Downloadable File.
+We limited this data set to records with state = DE.
+https://data.cms.gov/provider-data/dataset/mj5m-pzi6
+
+It is meant to theoretically aid in decision-making for an affordable care organization (ACO) while improving upon the value-based care model.
+
+```{r}
+
+library(tidyverse)
+
+#Import data into files and load it into an RMD file
+practice_data <- read_csv("aledade_question_2.csv")
+
+#Select certain columns of interest needed for analysis; focusing on family practices, addresses, average charges, and average Medicare payments
+#Rename columns for ease of reading (note: not needed since data dictionary is available via web)
+
+question_3 <- practice_data %>%
+  select(c("AVG_SBMTD_CHRG", "AVG_MDCR_PYMT_AMT", "HCPCS_CD","RNDRNG_PRVDR_TYPE",
+           "RNDRNG_PRVDR_ST1", "RNDRNG_PRVDR_ST2")) %>%
+  filter(HCPCS_CD == 'G0439', RNDRNG_PRVDR_TYPE == 'Family Practice') %>%
+  rename(address_line_1 = RNDRNG_PRVDR_ST1, address_line_2 = RNDRNG_PRVDR_ST2,
+         avg_charge = AVG_SBMTD_CHRG, avg_payment = AVG_MDCR_PYMT_AMT,
+         visit_type = HCPCS_CD, specialty = RNDRNG_PRVDR_TYPE) 
+
+#This data frame gives a cleaner overview of the data set which will allow for questions to emerge
+#After reviewing the cleaned data frame created above, I am curious how average submitted charge amounts and average Medicare payment amounts differ
+
+
+#Create plot to better visualize this comparison in order to generate more insights and identify any outliers
+
+aledade_plot <- ggplot(question_3, aes(x=avg_charge, y=avg_payment)) + geom_point() + geom_smooth(method=lm, se=FALSE)
+print(aledade_plot + labs(
+  title = "Average Submitted Charge Amount vs Average Medicare Payment Amount",
+  y = "Average Medicare Payment ($)", x = "Average Charge ($)"))
+
+#From this point in the visualization, outliers can be identified. This might indicate which practices, if any, might need additional oversight/help in reducing their costs per how they are being paid by Medicare
