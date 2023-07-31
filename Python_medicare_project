@@ -1,0 +1,87 @@
+This project utilizes Python to conduct in-depth analysis on an abundant and open Medicare data set, readily accessible to the public through the link below.
+Data Source: Medicare.gov - The official Medicare website (https://www.medicare.gov/). This esteemed platform provides unfettered access to a diverse range of data sets concerning Medicare beneficiaries, healthcare providers, and services.
+This work was an assignment completed through a graduate-level course.
+
+
+Objectives (using data to answer the following questions):
+1. What is the average age of a patient?
+2. What is the average age of a non-smoker vs. a smoker?
+3. Who pays more for insurance, a non-smoker or a smoker?
+4. Which sex has more children?
+
+
+import csv
+
+with open('insurance.csv', 'r') as csv_file:
+    reader = csv.DictReader(csv_file)
+    insurance = {'age': [], 'sex': [], 'bmi': [], 'children': [], 'smoker': [], 'region': [], 'charges': [] }
+    for row in reader:
+        insurance['age'].append(row['age'])
+        insurance['sex'].append(row['sex'])
+        insurance['bmi'].append(row['bmi'])
+        insurance['children'].append(row['children'])
+        insurance['smoker'].append(row['smoker'])
+        insurance['region'].append(row['region'])
+        insurance['charges'].append(row['charges'])
+# print(insurance)
+
+
+#average age function
+def average_age(ages):
+    total = 0
+    for value in ages['age']:
+        total += int(value)
+    return ('Average Patient Age: ' + str(round(total/len(ages['age']))))
+average_age(insurance)
+
+
+#average age of smoker vs non-smoker function
+def average_smoker_age(data):
+    smoker_patients = [age for smoke, age in zip(data['smoker'], data['age']) if smoke == 'yes']
+    non_smoker_patients = [age for smoke, age in zip(data['smoker'], data['age']) if smoke == 'no']
+    smoker_total = 0
+    non_smoker_total = 0
+    for smoker, non_smoker in zip(smoker_patients, non_smoker_patients):
+        smoker_total += int(smoker)
+        non_smoker_total += int(non_smoker)
+    print("Average Smoker Age: " + str(round(smoker_total/len(smoker_patients))))
+    print("Average Non-Smoker Age: " + str(round(non_smoker_total/len(non_smoker_patients))))
+average_smoker_age(insurance)
+
+
+#insurance payment: non-smoker vs. smoker function
+def insurance_payment(data):
+    smoker_patients = [charge for smoke, charge in zip(data['smoker'], data['charges']) if smoke == 'yes']
+    non_smoker_patients = [charge for smoke, charge in zip(data['smoker'], data['charges']) if smoke == 'no']
+    smoker_total = 0
+    non_smoker_total = 0
+    for smoker, non_smoker in zip(smoker_patients, non_smoker_patients):
+        smoker_total += float(smoker)
+        non_smoker_total += float(non_smoker)
+    smoker_average = str(round(smoker_total/len(smoker_patients), 2))
+    non_smoker_average = str(round(non_smoker_total/len(non_smoker_patients), 2))
+    if smoker_average > non_smoker_average:
+        return "The average insurance cost for a smoker is : " + smoker_average
+    elif non_smoker_average > smoker_average:
+        return "The average insurance cost for a non-smoker is: " + non_smoker_average
+    else:
+        return "Both groups have the same average cost."
+insurance_payment(insurance)
+
+
+#Sex Total Children Count
+def child(data):
+    female_list = [kid for gender, kid in zip(data['sex'], data['children']) if gender == 'female']
+    male_list = [kid for gender, kid in zip(data['sex'], data['children']) if gender == 'male']
+    female_total = 0
+    male_total = 0
+    for female, male in zip(female_list, male_list):
+        female_total += int(female)
+        male_total += int(male)
+    if female_total > male_total:
+        return "Females have more children: " + str(female_total)
+    elif male_total > female_total:
+        return "Males have more children: " + str(male_total)
+    else:
+        return "Both sexes have the same amout of children"
+child(insurance)
