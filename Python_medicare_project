@@ -85,3 +85,13 @@ def child(data):
     else:
         return "Both sexes have the same amout of children"
 child(insurance)
+
+
+
+
+
+
+
+
+
+Please contact ambermorris@berkeley.edu with any questions regarding this project.
