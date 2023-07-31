@@ -14,7 +14,7 @@ Doctors and Clinicians National Downloadable File.
 We limited this data set to records with state = DE.
 https://data.cms.gov/provider-data/dataset/mj5m-pzi6
 
-This analysis was completed in SQQL during an unpaid interview process.
+This analysis was completed in SQL.
 It is meant to theoretically aid in decision-making for an affordable care organization (ACO) while improving upon the value-based care model.
 
 SELECT *
